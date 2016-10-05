@@ -1,0 +1,22 @@
+{
+  "twitter": {
+    "https://api.twitter.com": {
+      "__domain": {
+        "auth": {
+          "oauth": {"token": "[0]", "secret": "[1]"}
+        }
+      },
+      "[version]/{endpoint}.[type]": {
+        "__path": {
+          "alias": "__default",
+          "version": "1.1"
+        }
+      },
+      "oauth2/{endpoint}": {
+        "__path": {
+          "alias": "oauth"
+        }
+      }
+    }
+  }
+}
