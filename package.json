@@ -1,6 +1,6 @@
 {
   "name": "incoming-webhooks",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Incoming WebHooks",
   "private": true,
   "keywords": [],
@@ -14,13 +14,22 @@
   "dependencies": {
     "@request/client": "^0.1.0",
     "@request/oauth": "^0.1.0",
-    "purest": "^3.0.0"
+    "purest": "^3.0.1"
   },
   "devDependencies": {},
-  "main": "",
-  "files": [],
+  "bin": {
+    "slack-webhook-twitter": "./bin/"
+  },
+  "main": "./lib/",
+  "files": [
+    "bin/",
+    "config/",
+    "lib/",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {},
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=6.0.0"
   }
 }
