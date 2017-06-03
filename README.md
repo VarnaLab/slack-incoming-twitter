@@ -1,22 +1,29 @@
 
+# slack-incoming-twitter
+
+Slack Incoming WebHook for Twitter
+
+
 # Install
 
 ```bash
-npm install -g slack-webhook-twitter
+npm install -g slack-incoming-twitter
 ```
+
 
 # CLI
 
 ```bash
-slack-webhook-twitter \
-  --env development|staging|production \
-  --config path/to/config.json \
-  --db path/to/db.json
+slack-incoming-twitter \
+  --config /path/to/config.json \
+  --db /path/to/db.json \
+  --env environment
 ```
+
 
 # config.json
 
-```js
+```json
 {
   "development": {
     "twitter": {
@@ -30,42 +37,98 @@ slack-webhook-twitter \
         "secret": "[OAuth Access Secret]"
       }
     },
-    "slack": {
-      "hook": "[Hook URL]", // or ["[Hook URL 1]", "[Hook URL N]"]
-      "username": "[Bot Name]",
-      "icon_url": "[Bot Avatar]",
-      "channel": "[Target Channel or User]"
-    }
+    "slack": { "see below" }
   }
 }
 ```
+
+The `username`, `icon_url` and `channel` keys are optional and take effect only if the hook is a *Custom Integration*. These 3 keys have no effect for bundled *OAuth Apps*.
+
+> Single hook:
+
+```json
+"slack": {
+  "hook": "[Hook URL]",
+  "username": "[App Name]",
+  "icon_url": "[App Avatar]",
+  "channel": "[Target #channel or @user]"
+}
+```
+
+> Multiple hooks with a common `username`, `icon_url` and `channel` configuration:
+
+```json
+"slack": {
+  "hook": [
+    "[Hook URL 1]",
+    "[Hook URL 2]"
+  ],
+  "username": "[App Name]",
+  "icon_url": "[App Avatar]",
+  "channel": "[Target #channel or @user]"
+}
+```
+
+> Multiple hooks with separate `username`, `icon_url` and `channel` configuration:
+
+```json
+"slack": [
+  {
+    "hook": "[Hook URL 1]",
+    "username": "[App Name]",
+    "icon_url": "[App Avatar]",
+    "channel": "[Target #channel or @user]"
+  },
+  {
+    "hook": [
+      "[Hook URL 2]",
+      "[Hook URL 3]"
+    ],
+    "username": "[App Name]",
+    "icon_url": "[App Avatar]",
+    "channel": "[Target #channel or @user]"
+  }
+]
+```
+
 
 # db.json
 
 ```js
 {
   "development": {
-    "id": ""
+    "id": "0"
+  },
+  "production": {
+    "id": "0"
   }
 }
 ```
 
+
 # Crontab
 
 ```bash
-# Check on every 15 min:
-*/15 * * * * node slack-webhook-twitter [params] >> twitter.log
+# Run on every 15 min:
+*/15 * * * * node slack-incoming-twitter [params] >> slack-incoming-twitter.log
 ```
+
 
 # API
 
 ```js
-var hook = require('slack-webhook-twitter')
-hook.init({
-  env: 'development',
+var hook = require('slack-incoming-twitter')
+
+hook({
   config: require('config.json'),
-  db: require('db.json')
+  db: require('db.json'),
+  dpath: '/absolute/path/to/db.json',
+  env: 'development'
 })
-// Check on every 15 min:
-setTimeout(() => hook.check, 1000 * 60 * 15)
+.then((responses) => {
+  responses.forEach(([res, body]) => {
+    console.log(new Date().toString(), res.statusCode, body)
+  })
+})
+.catch((err) => console.error(new Date().toString(), err))
 ```
