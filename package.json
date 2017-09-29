@@ -21,7 +21,7 @@
   },
   "devDependencies": {},
   "bin": {
-    "slack-incoming-twitter": "./bin/"
+    "slack-incoming-twitter": "./bin/index.js"
   },
   "main": "./lib/",
   "files": [
@@ -33,6 +33,7 @@
   ],
   "scripts": {},
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0",
+    "npm": ">=5.0.0"
   }
 }
